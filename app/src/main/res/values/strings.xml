@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">My Application</string>
+
+    <string-array name="variant">
+        <item>Cendol Susu</item>
+        <item>Cendol Soda</item>
+        <item>Cendol Cincau</item>
+        <item>Cendol Cendolan</item>
+    </string-array>
+
+</resources>
