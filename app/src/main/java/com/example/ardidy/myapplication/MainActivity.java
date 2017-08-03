@@ -4,6 +4,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -12,10 +15,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     Button btnMinus, btnPlus, btnProses;
     EditText edtJumlah;
+
+
+    private List<DataModel> dataList = new ArrayList<>();
+    RecyclerView recyclerPesanan;
+    private DataAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         final Spinner spinner = (Spinner) findViewById(R.id.spinnerVarian);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.variant, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -35,6 +46,28 @@ public class MainActivity extends AppCompatActivity {
         btnPlus = (Button) findViewById(R.id.btnTambah);
         btnProses = (Button) findViewById(R.id.btnProses);
         edtJumlah = (EditText) findViewById(R.id.edtJumlah);
+
+
+        mAdapter = new DataAdapter(dataList);
+        recyclerPesanan = (RecyclerView) findViewById(R.id.recyclerPesanan);
+        recyclerPesanan.setHasFixedSize(true);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        recyclerPesanan.setLayoutManager(llm);
+        recyclerPesanan.setItemAnimator(new DefaultItemAnimator());
+        recyclerPesanan.setAdapter(mAdapter);
+
+//
+//        dataList.add(new DataModel("1", "aaa","5"));
+//        dataList.add(new DataModel("1", "aaa","5"));
+//        dataList.add(new DataModel("1", "aaa","5"));
+//        dataList.add(new DataModel("1", "aaa","5"));
+//        dataList.add(new DataModel("1", "aaa","5"));
+//        dataList.add(new DataModel("1", "aaa","5"));
+//        dataList.add(new DataModel("1", "aaa","5"));
+//        dataList.add(new DataModel("1", "aaa","5"));
+//        dataList.add(new DataModel("1", "aaa","5"));
+//        dataList.add(new DataModel("1", "aaa","5"));
+
 
         btnMinus.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,7 +109,11 @@ public class MainActivity extends AppCompatActivity {
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                                        Toast.makeText(MainActivity.this, "Pesanan anda : "+rasa+ " sebanyak : "+jumlah+ " buah", Toast.LENGTH_SHORT).show();
+
+                        dataList.add(new DataModel(""+(dataList.size() + 1), rasa, jumlah));
+                        mAdapter.notifyDataSetChanged();
+                        edtJumlah.setText("0");
+                        Toast.makeText(MainActivity.this, "Pesanan anda : "+rasa+ " sebanyak : "+jumlah+ " buah", Toast.LENGTH_SHORT).show();
 
                     }
                 });
